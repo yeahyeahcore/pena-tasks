@@ -9,7 +9,6 @@ import (
 	envParser "github.com/sethvargo/go-envconfig"
 )
 
-// Read read default env file and returns struct pointer by generic
 func Read[T interface{}]() (*T, error) {
 	var configuration T
 

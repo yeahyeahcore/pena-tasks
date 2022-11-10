@@ -7,19 +7,15 @@ import (
 	"syscall"
 
 	"github.com/yeahyeahcore/pena-tasks/internal/server"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type gracefulShutdownDeps struct {
 	httpServer *server.HTTP
-	mongo      *mongo.Client
 	cancel     context.CancelFunc
 }
 
 func gracefulShutdown(ctx context.Context, deps *gracefulShutdownDeps) {
 	defer deps.httpServer.Stop(ctx)
-	defer deps.mongo.Disconnect(ctx)
 	defer deps.cancel()
 
 	quit := make(chan os.Signal, 1)

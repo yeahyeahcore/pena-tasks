@@ -21,7 +21,6 @@ func Run(config *models.Config, logger *logrus.Logger) {
 		config:     &config.HTTP,
 	})
 
-	// TODO: отрефакторить gracefulShutdown
 	gracefulShutdown(ctx, &gracefulShutdownDeps{
 		httpServer: httpServer,
 		cancel:     cancel,

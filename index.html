@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Test SSE</title>
+        <script>
+            console.log("script run");
+            const evtSource = new EventSource("http://localhost:8080/listen");
+            evtSource.onmessage = function(event) {
+                const newElement = document.createElement("li");
+                const eventList = document.getElementById("results");
+                newElement.textContent = "message: " + event.data;
+                eventList.appendChild(newElement);
+            }
+        </script>
+    </head>
+    <body>
+        <ul id="results">
+
+        </ul>
+    </body>
+</html>

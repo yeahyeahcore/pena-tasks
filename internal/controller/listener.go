@@ -34,7 +34,7 @@ func (receiver *ListenerController) Say(ctx echo.Context) error {
 	if err != nil {
 		receiver.logger.Errorln("read /say body error: ", err.Error())
 
-		return ctx.JSON(http.StatusBadRequest, err.Error())
+		return ctx.String(http.StatusBadRequest, "failed read body")
 	}
 
 	receiver.mState.Lock()
@@ -43,21 +43,21 @@ func (receiver *ListenerController) Say(ctx echo.Context) error {
 
 	receiver.mState.Unlock()
 
-	return ctx.JSON(http.StatusOK, "success changed state")
+	return ctx.String(http.StatusOK, "success changed state")
 }
 
 func (receiver *ListenerController) Subscribe(ctx echo.Context) error {
 	writer := ctx.Response().Writer
 
-	writer.Header().Set("Content-Type", "text/event-stream")
-	writer.Header().Set("Cache-Control", "no-cache")
-	writer.Header().Set("Connection", "keep-alive")
+	writer.Header().Set(echo.HeaderContentType, "text/event-stream")
+	writer.Header().Set(echo.HeaderCacheControl, "no-cache")
+	writer.Header().Set(echo.HeaderConnection, "keep-alive")
 
 	ticker := time.NewTicker(time.Second)
 
 	flusher, ok := writer.(http.Flusher)
 	if !ok {
-		ctx.JSON(http.StatusInternalServerError, "flusher not init")
+		ctx.String(http.StatusInternalServerError, "flusher not init")
 	}
 
 	for {
